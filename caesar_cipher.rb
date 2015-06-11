@@ -7,18 +7,18 @@
 ## were to be intercepted. 
 ## Enjoy!
 
-def ceasar_cipher(string, shift)
+def caesar_cipher(text, shift)
 	alphabet = "abcdefghijklmnopqrstuvwxyz" # No ñ's, I am afraid. Lo siento!
 	encrypted_string = ""
-	string.split("").each do |letter|
-		if "\"\',.:;?!&'1234567890@%$".include?(char) # Hopefully, that covers everything.
+	text.split("").each do |char| #char here represents short for character. I opologize if that insults your intelligence.
+		if "\"\',.:;?!&'1234567890@%$ ".include?(char) # Hopefully, that covers everything.
 			encrypted_string << char
 		else
-			encrypted_letter = alphabet[(alphabet.index(char.downcase) + shift) % 26]
-			if letter == letter.upcase
-				encrypted_string << encrypted.upcase
+			encrypted_char = alphabet[(alphabet.index(char.downcase) + shift) % 26]
+			if char == char.upcase
+				encrypted_string << encrypted_char.upcase
 			else
-				encrypted_sting << encrypted_letter
+				encrypted_string << encrypted_char
 			end
 
 		end
@@ -27,3 +27,4 @@ def ceasar_cipher(string, shift)
 	return encrypted_string.strip #trim down those edges nicely
 end
 
+print caesar_cipher("Winter has come", 7)
