@@ -27,4 +27,12 @@ def caesar_cipher(text, shift)
 	return encrypted_string.strip #trim down those edges nicely
 end
 
-print caesar_cipher("Winter has come", 7)
+print caesar_cipher("Winter has come", 4)
+
+
+
+
+
+
+
+
