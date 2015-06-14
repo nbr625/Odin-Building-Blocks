@@ -28,11 +28,3 @@ def caesar_cipher(text, shift)
 end
 
 print caesar_cipher("Winter has come", 4)
-
-
-
-
-
-
-
-
