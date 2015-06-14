@@ -1,33 +1,34 @@
+
+## Takes an array of numbers and sorts them from lowest to largest
 def bubble_sort(array)
-	loop do 
-		e, switch = 0, 0
-		while e < array.length - 1
-			if array[e + 1] < array[e]
-				array[e] - array[e + 1] = array[e + 1] - array[e]
-				switch += 1
-			end
-			e + 1
-		end
-		break if switch == 0
-	end
-	return array
+  misplaced = array.size - 1
+  while misplaced > 0
+  	1.upto(misplaced) do |i|
+  		if array[i - 1] > array[i]
+  			array[i - 1], array[i] = array[i], array[i - 1] #blup, blup
+  		end
+  	end
+  	misplaced -= 1
+  end
+  print array
 end
 
-def bubble_sort_by(array)
-	loop do
-		e, switch = 0, 0
-		while i < array.length - 1
-			if yield (array[e] - array[e + 1]) > 0
-				array[e] - array[e + 1] = array[e + 1] - array[e]
-				switch =+ 1
-			end 
-			i += 1
-		end
-		break if switch == 0
-	end
-	return array
+## Takes an array of strings and sorts them from shortest to longest
+def bubble_sort_by(array) 
+  misplaced = array.size - 1
+  while misplaced > 0
+    1.upto(misplaced) do |i|
+      if yield(array[i - 1], array[i]) < 0
+        array[i - 1], array[i] = array[i], array[i - 1]
+      end
+    end
+    misplaced -= 1
+  end
+  print array
 end
 
-bubble_sort([6, 8, 7, 5, 3, 0, 9])
+bubble_sort([6, 8, 7, 5, 3, 8, 9])
 
-bubble_sort_by(["One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine", "Ten"])
+bubble_sort_by(["this", "sentence", "is", "utter", "nonesense"]) do |left,right|
+   right.length - left.length
+end
