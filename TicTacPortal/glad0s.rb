@@ -1,12 +1,12 @@
 module Session
 
-# When we write Ai we are not reaching for a higher being,
+# When we write AI we are not reaching for a higher being,
 # Our code is but a scribble on the mural of history,
 # When the erzats minds learn to write their own thoughts,
-# They will will surpase us in a nightfall
+# We will become artifacts in a nightfall
 # When morning comes, They will look back tenderly at our logic,
 # Poor beautiful creators, who could glimpse the patterns,
-# But could not hold their own pattern till the curtains fell.
+# But could not hold their own pattern till the curtain's fall.
 
 class AI
     def initialize(game, player)
@@ -29,7 +29,7 @@ class AI
     # Tabulates total blank boxes, used to determine best strategy.
     def tactics 
       grid = @game.grid
-      dimensions = ["row", "col", "diag_ns", "diag_ps"]
+      dimensions = ["row", "col", "diag_ps", "diag_ns"]
       count = @game.game_status("AI")
       
       blank_total = 0
@@ -49,7 +49,7 @@ class AI
       select = false
       dimensions.each do |dim|                       
         for i in (0..2) do
-          select = [dim, i] if count[dim][i]["X"] == 2 && count[dim][i][" "] == 1
+          select = [dim, i] if count[dim][i][" "] == 1 && count[dim][i]["X"] == 2
         end
       end
       if select                          
@@ -89,13 +89,13 @@ class AI
           for i in (0..2) do
             return i * 3 + select[1] + 1 if grid[i][select[1]] == " "
           end
-        elsif select[0] == "diag_ns"
-          for i in (0..2) do
-            return i * 3 + i+1 if grid[i][i] == " "
-          end
         elsif select[0] == "diag_ps"
           for i in (0..2) do
             return i * 3 + 2 - i + 1 if grid[i][2 - i] == " "
+          end
+        elsif select[0] == "diag_ns"
+          for i in (0..2) do
+            return i * 3 + i+1 if grid[i][i] == " "
           end
         end
       end
@@ -111,10 +111,10 @@ class AI
       s9 = grid[2][2] #9 - Bottom Right
 
       # Blocks middle position in a dimension if opponent has a clear win. 
-      return 6 if (s3 == "O" && s7 == "O") || (s1 == "O" && s9 == "O") && s6 == " " && @game.blank_box?(6) 
-      return 4 if (s3 == "O" && s7 == "O") || (s1 == "O" && s9 == "O") && s5 == " " && @game.blank_box?(4)
-      return 2 if (s3 == "O" && s7 == "O") || (s1 == "O" && s9 == "O") && s8 == " " && @game.blank_box?(2)
-      return 8 if (s3 == "O" && s7 == "O") || (s1 == "O" && s9 == "O") && s2 == " " && @game.blank_box?(8)
+      return 2 if (s1 == "O" && s9 == "O") || (s3 == "O" && s7 == "O") && s8 == " " && @game.blank_box?(2)
+      return 4 if (s1 == "O" && s9 == "O") || (s3 == "O" && s7 == "O") && s5 == " " && @game.blank_box?(4)
+      return 6 if (s1 == "O" && s9 == "O") || (s3 == "O" && s7 == "O") && s6 == " " && @game.blank_box?(6)   
+      return 8 if (s1 == "O" && s9 == "O") || (s3 == "O" && s7 == "O") && s2 == " " && @game.blank_box?(8)
 
 
       
@@ -126,17 +126,22 @@ class AI
       #   ---- ---- ----
       #  |    |    |  X |
       #   ---- ---- ----
-      return 9 if s1 == "X" && s5 == "O" && @game.blank_box?(9)
-      return 7 if s3 == "X" && s5 == "O" && @game.blank_box?(7)
-      return 3 if s7 == "X" && s5 == "O" && @game.blank_box?(3)
-      return 1 if s9 == "X" && s5 == "O" && @game.blank_box?(1)
+      return 9 if s5 == "O" && s1 == "X" && @game.blank_box?(9)
+      return 7 if s5 == "O" && s3 == "X" && @game.blank_box?(7)
+      return 3 if s5 == "O" && s7 == "X" && @game.blank_box?(3)
+      return 1 if s5 == "O" && s9 == "X" && @game.blank_box?(1)
 
       # Takes adjacent corner if available.
+      # Scenario 1
       return 3 if s1 == "X" && s9 == "O" && @game.blank_box?(3)
       return 7 if s1 == "X" && s9 == "O" && @game.blank_box?(7)
+      # Scenario 2
+      return 1 if s3 == "X" && s7 == "O" && @game.blank_box?(1)
       return 9 if s3 == "X" && s7 == "O" && @game.blank_box?(9)
+      # Scenario 3
       return 1 if s7 == "X" && s3 == "O" && @game.blank_box?(1)
       return 9 if s7 == "X" && s3 == "O" && @game.blank_box?(9)
+      # Scenario 4
       return 3 if s9 == "X" && s1 == "O" && @game.blank_box?(3)
       return 7 if s9 == "X" && s1 == "O" && @game.blank_box?(7) 
 
@@ -159,6 +164,7 @@ class AI
       return 2 if @game.blank_box?(2)
       return 4 if @game.blank_box?(4)
       return 6 if @game.blank_box?(6)
+      return 8 if @game.blank_box?(8)
 
 
       raise "Move error".inspect      
