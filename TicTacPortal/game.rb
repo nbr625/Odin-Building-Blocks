@@ -1,5 +1,6 @@
-require_relative 'ai'
-
+require_relative 'glad0s'
+require_relative 'player'
+require_relative 'color'
 
 module Session
 
@@ -48,7 +49,6 @@ module Session
     # Determines the wheter their is a win of tie conditon
     def game_status(mode)      
                                
-
       grid = @grid             
       blank_total = 0
       dimensions = ["row", "col", "diag_ns", "diag_ps"]  
@@ -105,8 +105,7 @@ module Session
         return false if blank_total >= 2               
         return true if blank_total == 0                
 
-        # A tie cannot occur if there are two of the same mark in a row and the opportunity to finish the row (i.e., one turn away from winning.)
-        #   Though, there still could be a tie if there is only one empty space and the player is forced to block (checked in next block).
+        # A tie cannot occur if there are two of the same mark in a row.
         dimensions.each do |dim|
           for i in (0..2) do
             return false if count[dim][i]["X"] == 2 and count[dim][i][" "] == 1 and @current_player == "O"
@@ -135,114 +134,10 @@ module Session
       i = 1
       @grid.each do |row|
         row.each do |column|
-          print "|#{i}. #{column}| "
+          print blue("|") + blue(i) + ". " + pink(column) + pink("|")
           i += 1
         end
         print "\n"
-      end
-    end
-  end
-  class Player
-    attr_accessor :current_player
-
-    def initialize
-      @game = Game.new
-      @game_over = false
-    end
-    # Sets display name.
-    def print_name(name)
-      if @game_mark == "AI"
-        disp = "Monster" if name == "O"
-        disp = "Glados" if name == "X"
-      else
-        disp = "Test Subject: " + name.to_s
-      end
-      disp
-    end
-
-    # Swaps players
-    def assign_player                              
-      @game.current_player == "O" ? @game.current_player = "X" : @game.current_player = "O"
-    end
-
-    # Swtiches turns if there is no win or tie condition.
-    def control(player_choice)                                 
-      if @game_over == false
-        @game.make_move(@game.current_player, player_choice)   
-        if @game.win?                                         
-          @game.print_grid
-          puts "Congratulations " + print_name(@game.win?) + " gets cake, the loser will not be reformated into cake ingredients."
-          @game_over = true
-        elsif @game.tie?                             
-          @game.print_grid
-          puts "It seems that you are both equally dumb. And probably equally flamable."
-          @game_over = true
-        else                                        
-          if @game_mark == "player"                 
-            assign_player
-            start_turn
-          elsif @game_mark == "AI"                   
-            
-            if @game.current_player == "O"           
-              assign_player                     
-              @AI.make_move                     
-            elsif @game.current_player == "X"   
-              assign_player                     
-              start_turn                        
-            end
-          else                                  
-            raise "Game mark Error".inspect
-          end
-        end
-      end
-    end
-
-    # Start the game session
-    def start             
-      puts "Welcome to Apeture Science TicTacToe, were we screen the test subjects from the cake ingredients"    
-      # Get input from player on game mode
-      valid = false
-      until valid == true
-        puts "To play against another pathetic test \"participant\", press P. If you dare challenge a cyber god, press A, inpudent monster"
-        @input = STDIN.gets.chomp.downcase
-
-        valid = "pa".split("")
-        if valid.include?(@input)
-          valid = true
-        else
-          puts "Seems you could not manage that simple task. Well at least you can rest assured that you will burn well."
-        end
-      end
-      # Set game mode
-      if @input == "p"
-        @game_mark = "player"
-      elsif @input == "a"
-        @AI = AI.new(@game, self)              
-        @game_mark = "AI" 
-        if @game.current_player == "X"         
-          @AI.make_move
-        end
-      end
-      start_turn                               
-    end
-
-    # changes turn once valid move is performed and game conditions allow (no Win or Tie) 
-    def start_turn                              
-      if @game_over == false
-        @game.print_grid
-        puts "Pick an empty box, " + print_name(@game.current_player) + ". Resitance is futile."
-        player_choice = STDIN.gets.chomp        
-        valid = "123456789".split("")           
-        unless valid.include? player_choice
-          puts "Enter a number from 1 to 9, resistance discouraged... with deadly neurotoxin"
-          start_turn
-        end
-        if @game.blank_box?(player_choice)          
-          control(player_choice)                    
-        else                                        
-          puts "That square is taken. Since you cannot see that obvious fact we have taken points off your final grade. If you were not an orphan your family would be ashamed"
-          start_turn
-        end
       end
     end
   end

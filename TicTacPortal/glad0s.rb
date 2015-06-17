@@ -1,12 +1,22 @@
-module TicTacToe
+module Session
+
+# When we write Ai we are not reaching for a higher being,
+# Our code is but a scribble on the mural of history,
+# When the erzats minds learn to write their own thoughts,
+# They will will surpase us in a nightfall
+# When morning comes, They will look back tenderly at our logic,
+# Poor beautiful creators, who could glimpse the patterns,
+# But could not hold their own pattern till the curtains fell.
+
 class AI
-    def initialize game, player
+    def initialize(game, player)
       @game = game                                 
       @player = player
     end
 
+    # Makes sure the AI does not make invalid move.
     def make_move
-      puts "Behold my superior intelligence, human."
+      puts "Behold my superior intelligence, " + pink("human") + "."
       move = tactics
       if @game.blank_box?(move)
         @player.control(move)
@@ -15,6 +25,7 @@ class AI
         raise "AI Error".inspect                     
       end
     end
+
     # Tabulates total blank boxes, used to determine best strategy.
     def tactics 
       grid = @game.grid
